@@ -1,0 +1,29 @@
+name: Auto Merge Approved PR
+
+on:
+  pull_request:
+    branches:
+      - feature/*  # Adjust for your feature branch naming convention
+    types:
+      - reviewed
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+      - name: Merge the PR to dev if approved
+        run: |
+          PR_STATUS=$(curl -s \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews" | \
+            jq '[.[] | select(.state=="APPROVED")] | length')
+
+          if [ "$PR
