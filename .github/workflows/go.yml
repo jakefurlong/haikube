@@ -23,7 +23,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        go mod download
+        go get -u 'github.com/openai/openai-go@v0.1.0-beta.10'
 
     - name: Lint with golangci-lint
       uses: golangci/golangci-lint-action@v3
