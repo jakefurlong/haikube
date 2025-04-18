@@ -36,3 +36,29 @@ Design, build, and deploy Haikube — a daily haiku generator using OpenAI, Go, 
 │   └── config.yaml              # Configuration file for backend settings (e.g., OpenAI API key)
 │
 └── README.md                    # Project documentation
+
+## CI/CD
+
+This is all subject to change after seeing how testing goes...
+
+
+                                                   Prod
+|-------------------------|------------------|------------|--------------|
+                                  Test                            /
+|-------------------------|------------------|------------|------/
+            Dev                                    /
+|-------------------------|------------------|----/
+           \                     /
+            \_____Feature_|_____/
+
+- Developer creates feature branch
+- Developer makes changes or writes new code and pushes to feature branch
+- Develoepr created PR
+- Another developer reviews PR and approves
+- Git action watches for approved PRs and perform unit test
+  - if pass: merge to dev
+  - else: fail and send an message
+- On dev sha change, trigger github action to run integration test
+  - If pass, merge to test, send message and create PR for prod
+  - else: fail and send message
+- On approval of PR to test, auto deploy to prod
