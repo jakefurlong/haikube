@@ -28,7 +28,7 @@ jobs:
         with:
           path: |
             ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('backend/go.sum') }}
+          key: ${{ runner.os }}-go-${{ hashFiles('backend/cmd/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-
 
