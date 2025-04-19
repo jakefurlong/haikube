@@ -8,8 +8,7 @@ import (
 
 func main() {
 	client := openai.NewClient()
-	chatCompletion, err := client.Chat.Completions.New(context.TODO(), openai.ChatCompletionNewParams
-	{
+	chatCompletion, err := client.Chat.Completions.New(context.TODO(), openai.ChatCompletionNewParams{
 		Messages: []openai.ChatCompletionMessageParamUnion{
 			openai.UserMessage("Write a humorous devops haiku."),
 		},
