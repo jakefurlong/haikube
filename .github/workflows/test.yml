@@ -1,5 +1,5 @@
 # .github/workflows/lint.yml
-name: Go lint
+name: Go test
 
 on:
   workflow_dispatch: 
@@ -8,16 +8,16 @@ on:
     branches:
       - dev
     paths:
-      - '**.go'
+      - 'backend/main.go'
 
   pull_request:
     branches:
       - dev
     paths:
-      - '**.go'
+      - 'backend/main.go'
 
 jobs:
-  lint:
+  test:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -42,8 +42,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
 
-      - name: Install and run golangci-lint
-        uses: golangci/golangci-lint-action@v7
-        with:
-          version: latest
-          working-directory: backend
+      - name: Run unit tests
+        working-directory: backend
+        run: go test ./... -v
