@@ -1,0 +1,58 @@
+/* Reset */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: system-ui, sans-serif;
+    background-color: #f8f8f8;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+  }
+  
+  .container {
+    max-width: 600px;
+    width: 100%;
+    padding: 8rem 2rem 2rem; /* ⬅️ Adjust this to move the content down slightly */
+    text-align: center;
+  }
+  
+  
+  /* Button */
+  button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    margin-top: 1rem;
+    background-color: #4f46e5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  button:hover {
+    background-color: #4338ca;
+  }
+  
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  /* Haiku */
+  .haiku {
+    margin-top: 2rem;
+    white-space: pre-wrap;
+    font-size: 1.25rem;
+    line-height: 1.6;
+    text-align: center;
+  }
+  
+  /* Error */
+  .error {
+    color: red;
+    margin-top: 1rem;
+  }
+  
