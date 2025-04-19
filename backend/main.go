@@ -10,6 +10,8 @@ import (
 	"github.com/openai/openai-go"
 )
 
+var haikuGenerator = GenerateHaiku
+
 type HaikuResponse struct {
 	Text string `json:"text"`
 }
@@ -33,7 +35,7 @@ func GenerateHaiku(ctx context.Context) (*HaikuResponse, error) {
 }
 
 func handleHaiku(w http.ResponseWriter, r *http.Request) {
-	haiku, err := GenerateHaiku(r.Context())
+	haiku, err := haikuGenerator(r.Context()) // 🔄 USE haikuGenerator here
 	if err != nil {
 		http.Error(w, "Failed to generate haiku", http.StatusInternalServerError)
 		log.Println("OpenAI error:", err)
@@ -41,8 +43,12 @@ func handleHaiku(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*") // 🔥 Allow frontend requests (dev only)
-	json.NewEncoder(w).Encode(haiku)
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	if err := json.NewEncoder(w).Encode(haiku); err != nil {
+		http.Error(w, "Failed to encode response", http.StatusInternalServerError)
+		log.Println("JSON encode error:", err)
+	}
 }
 
 func main() {
