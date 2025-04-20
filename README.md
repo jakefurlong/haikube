@@ -1,64 +1,119 @@
-# haikube
-Design, build, and deploy Haikube — a daily haiku generator using OpenAI, Go, and Kubernetes — with persistent storage and a simple user interface.
+# 🌸 Haikube
 
-## Scaffolding
+> A Kubernetes-themed haiku generator with DevOps soul and AI magic.
 
-/haikube
-│
-├── /frontend
-│   ├── /public
-│   │   └── index.html           # Main HTML file
-│   ├── /src
-│   │   ├── /components
-│   │   │   └── App.js           # React components (if you're using React)
-│   │   ├── /assets
-│   │   │   └── logo.png         # Images and other static assets
-│   │   └── index.js             # Main JS file to load the React app
-│   ├── package.json             # Frontend dependencies
-│   └── webpack.config.js        # Webpack config for bundling (if using webpack)
-│
-├── /backend
-│   ├── /cmd
-│   │   └── haikube.go           # Main entry point for Go backend
-│   ├── /pkg
-│   │   ├── /handlers
-│   │   │   └── haiku_handler.go  # Handler for generating and serving haikus
-│   │   ├── /services
-│   │   │   └── haiku_service.go  # Service that interacts with OpenAI API or generates haikus
-│   │   ├── /models
-│   │   │   └── haiku.go         # Data structure for a Haiku
-│   │   └── /utils
-│   │       └── logger.go        # Utility functions like logging
-│   ├── go.mod                   # Go module dependencies
-│   └── go.sum                   # Go module checksum
-│
-├── /config
-│   └── config.yaml              # Configuration file for backend settings (e.g., OpenAI API key)
-│
-└── README.md                    # Project documentation
+Haikube is a full-stack project that combines a Go backend with a React frontend to deliver hilarious, poetic, and occasionally insightful DevOps haikus. Powered by OpenAI, deployed anywhere, and easy to extend — it's both art and infrastructure.
 
-## CI/CD
+---
 
-This is all subject to change after seeing how testing goes...
+## 🚀 Features
 
+- 🤖 AI-generated haikus using OpenAI GPT-4o
+- ⚙️ Go backend API with proper testing, linting, and CI
+- 🌐 Modern React frontend (Vite) with responsive design
+- ✅ Clean CORS handling, secure secret management
+- 💬 Integration-ready REST API (`GET /haiku`)
 
-                                                   Prod
-|-------------------------|------------------|------------|--------------|
-                                  Test                            /
-|-------------------------|------------------|------------|------/
-            Dev                                    /
-|-------------------------|------------------|----/
-           \                     /
-            \_____Feature_|_____/
+---
 
-- Developer creates feature branch
-- Developer makes changes or writes new code and pushes to feature branch
-- Develoepr created PR
-- Another developer reviews PR and approves
-- Git action watches for approved PRs and perform unit test
-  - if pass: merge to dev
-  - else: fail and send an message
-- On dev sha change, trigger github action to run integration test
-  - If pass, merge to test, send message and create PR for prod
-  - else: fail and send message
-- On approval of PR to test, auto deploy to prod
+## 📸 Preview
+
+![Screenshot of Haikube frontend](screenshot.png)
+
+---
+
+## 📦 Tech Stack
+
+| Layer    | Tech              |
+|----------|-------------------|
+| Backend  | Go (Golang)       |
+| API      | OpenAI GPT-4o     |
+| Frontend | React + Vite      |
+| Testing  | Go test + mocks   |
+| CI/CD    | GitHub Actions    |
+| Secrets  | Env vars / GitHub secrets |
+
+---
+
+## 🧑‍💻 Local Development
+
+### Prerequisites
+
+- Go 1.21+
+- Node.js 18+
+- OpenAI API key
+
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/your-username/haikube.git
+cd haikube
+```
+
+### 2. backend setup
+
+```bash
+cd backend
+export OPENAI_API_KEY=your-api-key
+go run main.go
+``` 
+
+### 3. Frontend setup
+
+```bash
+cd frontend
+npm install
+npm run dev
+
+```
+
+Open http://localhost:5173
+
+## 🧪 Testing
+
+```bash
+cd backend
+go test -v ./...
+```
+
+Includes:
+
+- ✅ Unit tests for GenerateHaiku()
+- ✅ Integration tests for GET /haiku using mocked responses
+
+## 🌐 API
+GET /haiku
+
+Returns:
+
+{
+  "text": "Pods drift through the cloud,\nYAML spells whispered at dusk,\nOps prays to the logs."
+}
+
+## 🔒 Secrets
+This app uses the OPENAI_API_KEY environment variable.
+
+In dev: export it manually or use a .env file
+
+In CI: store it securely in GitHub → Settings → Secrets → OPENAI_API_KEY
+
+## 📦 Production Deployment Ideas
+✅ Docker (coming soon)
+
+🚀 Deploy Go backend to Google Kubernetes Engine
+
+## 🧠 Inspiration
+Haikube is inspired by the beautiful chaos of Kubernetes and the occasional spiritual enlightenment that comes from debugging YAML at 3AM.
+
+## 🤝 Contributing
+Pull requests are welcome! Feel free to:
+
+Add new themes (e.g. cyberpunk, pirate ops)
+
+Improve the UI
+
+Extend the API
+
+## 📜 License
+MIT
+
