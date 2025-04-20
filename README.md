@@ -18,7 +18,7 @@ Haikube is a full-stack project that combines a Go backend with a React frontend
 
 ## 📸 Preview
 
-![Screenshot of Haikube frontend](screenshot.png)
+![Screenshot of Haikube frontend](./images/haikube.png)
 
 ---
 
