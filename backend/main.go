@@ -100,7 +100,7 @@ func handleHaiku(w http.ResponseWriter, r *http.Request) {
 
 // Get the haikus from the database
 func handleGetHaikus(w http.ResponseWriter, r *http.Request) {
-	rows, err := db.Query("SELECT id, text, created_at FROM haikus ORDER BY created_at DESC LIMIT 3")
+	rows, err := db.Query("SELECT id, text, created_at FROM haikus ORDER BY RANDOM() LIMIT 3")
 	if err != nil {
 		http.Error(w, "Failed to fetch haikus", http.StatusInternalServerError)
 		log.Println("Database error:", err)
@@ -110,7 +110,7 @@ func handleGetHaikus(w http.ResponseWriter, r *http.Request) {
 
 	var haikus []StoredHaiku
 	for rows.Next() {
-		var h StoredHaiku 
+		var h StoredHaiku
 		if err := rows.Scan(&h.ID, &h.Text, &h.CreatedAt); err != nil {
 			http.Error(w, "Failed to read haiku", http.StatusInternalServerError)
 			log.Println("Row scan error:", err)
