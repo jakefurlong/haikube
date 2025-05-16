@@ -21,7 +21,7 @@ function App() {
 
   return (
     <div className="container">
-      <h1>DevOps Haiku Generator</h1>
+      <h1>DevOps Haiku Generator.</h1>
       <button onClick={getHaiku} disabled={loading}>
         {loading ? 'Generating...' : 'Get Haiku'}
       </button>
