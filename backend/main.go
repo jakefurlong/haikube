@@ -3,10 +3,13 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/secretsmanager"
 	"github.com/openai/openai-go"
 )
 
@@ -17,6 +20,14 @@ type HaikuResponse struct {
 }
 
 func GenerateHaiku(ctx context.Context) (*HaikuResponse, error) {
+	key, err := getAPIKeyFromSecretsManager(ctx, "openai/api-key")
+	if err != nil {
+		return nil, fmt.Errorf("failed to retrieve OpenAI API key: %w", err)
+	}
+
+	// Set the key as an environment variable, so openai-go can use it
+	os.Setenv("OPENAI_API_KEY", key)
+
 	client := openai.NewClient()
 
 	chatCompletion, err := client.Chat.Completions.New(ctx, openai.ChatCompletionNewParams{
@@ -35,7 +46,7 @@ func GenerateHaiku(ctx context.Context) (*HaikuResponse, error) {
 }
 
 func handleHaiku(w http.ResponseWriter, r *http.Request) {
-	haiku, err := haikuGenerator(r.Context()) // 🔄 USE haikuGenerator here
+	haiku, err := haikuGenerator(r.Context())
 	if err != nil {
 		http.Error(w, "Failed to generate haiku", http.StatusInternalServerError)
 		log.Println("OpenAI error:", err)
@@ -49,6 +60,28 @@ func handleHaiku(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to encode response", http.StatusInternalServerError)
 		log.Println("JSON encode error:", err)
 	}
+}
+
+func getAPIKeyFromSecretsManager(ctx context.Context, secretName string) (string, error) {
+	cfg, err := config.LoadDefaultConfig(ctx)
+	if err != nil {
+		return "", fmt.Errorf("failed to load AWS config: %w", err)
+	}
+
+	svc := secretsmanager.NewFromConfig(cfg)
+
+	resp, err := svc.GetSecretValue(ctx, &secretsmanager.GetSecretValueInput{
+		SecretId: &secretName,
+	})
+	if err != nil {
+		return "", fmt.Errorf("failed to get secret: %w", err)
+	}
+
+	if resp.SecretString == nil {
+		return "", fmt.Errorf("secret string is nil")
+	}
+
+	return *resp.SecretString, nil
 }
 
 func main() {
