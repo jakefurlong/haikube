@@ -1,0 +1,49 @@
+### FOR MINIKUBE ONLY ###
+#
+#replicaCount: 1
+#
+#backend:
+#  image:
+#    repository: haikube-backend
+#    tag: latest
+#    pullPolicy: IfNotPresent
+#  containerPort: 8080
+#
+#frontend:
+#  image:
+#    repository: haikube-frontend
+#    tag: latest
+#    pullPolicy: IfNotPresent
+#  containerPort: 80
+#  apiUrl: http://haikube-backend:8080
+#
+#service:
+#  type: LoadBalancer
+#  frontendPort: 80
+#  backendPort: 80
+
+
+
+### FOR AWS ONLY ###
+replicaCount: 1
+
+backend:
+  image:
+    repository: 443374376889.dkr.ecr.us-west-1.amazonaws.com/haikube-backend
+    tag: latest
+    pullPolicy: IfNotPresent
+  containerPort: 8080
+
+frontend:
+  image:
+    repository: 443374376889.dkr.ecr.us-west-1.amazonaws.com/haikube-frontend
+    tag: latest
+    pullPolicy: IfNotPresent
+  apiUrl: http://haikube-backend:8080
+
+  containerPort: 80
+
+service:
+  type: LoadBalancer
+  frontendPort: 80
+  backendPort: 80

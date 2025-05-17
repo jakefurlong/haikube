@@ -10,7 +10,7 @@ function App() {
     setLoading(true)
     setError(null)
     try {
-      const res = await fetch('http://localhost:8080/haiku')
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/haiku`)
       const data = await res.json()
       setHaiku(data.text)
     } catch (err) {
