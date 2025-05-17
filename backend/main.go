@@ -26,7 +26,9 @@ func GenerateHaiku(ctx context.Context) (*HaikuResponse, error) {
 	}
 
 	// Set the key as an environment variable, so openai-go can use it
-	os.Setenv("OPENAI_API_KEY", key)
+	if err := os.Setenv("OPENAI_API_KEY", key); err != nil {
+		return nil, fmt.Errorf("failed to set environment variable: %w", err)
+	}
 
 	client := openai.NewClient()
 
