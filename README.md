@@ -117,3 +117,26 @@ Extend the API
 ## 📜 License
 MIT
 
+## Minikube Setup
+
+### Start minikube with addons
+
+`minikube start --driver=docker --addons=ingress`
+
+### Simulate a load balancer
+
+`minikube tunnel`
+
+### Deploy the App
+
+```
+kubectl apply -f k8s/deployment.yaml
+kubectl apply -f k8s/service.yaml
+kubectl apply -f k8s/ingress.yaml
+```
+
+### Test
+
+Update hosts file to include minikube ip and myapp.local
+
+Access: http://myapp.local
