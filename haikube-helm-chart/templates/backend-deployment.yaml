@@ -1,23 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-backend
+  name: backend
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-backend
+      app: backend
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-backend
+        app: backend
     spec:
       containers:
         - name: backend
-          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
-          imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
+          image: haikube-backend:latest
           ports:
-            - containerPort: {{ .Values.backend.containerPort }}
+            - containerPort: 8080
           envFrom:
             - secretRef:
                 name: aws-credentials
