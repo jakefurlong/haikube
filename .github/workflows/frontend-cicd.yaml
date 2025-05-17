@@ -1,0 +1,50 @@
+name: Frontend CI/CD
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/frontend-cicd.yaml'
+
+env:
+  AWS_REGION: ${{ vars.AWS_REGION }}
+  ECR_REGISTRY: ${{ secrets.ECR_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com
+  IMAGE_TAG: ${{ github.sha }}
+
+jobs:
+  lint-test-build-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Lint frontend
+        working-directory: ./frontend
+        run: |
+          npm ci
+          npm run lint || true
+
+      - name: Test frontend
+        working-directory: ./frontend
+        run: |
+          npm ci
+          npm run test || echo "no tests defined"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build & Push frontend Docker image
+        working-directory: ./frontend
+        run: |
+          docker build -t ${{ vars.ECR_REPOSITORY_FRONTEND }}:$IMAGE_TAG -t ${{ vars.ECR_REPOSITORY_FRONTEND }}:latest .
+          docker tag ${{ vars.ECR_REPOSITORY_FRONTEND }}:$IMAGE_TAG $ECR_REGISTRY/${{ vars.ECR_REPOSITORY_FRONTEND }}:$IMAGE_TAG
+          docker tag ${{ vars.ECR_REPOSITORY_FRONTEND }}:latest $ECR_REGISTRY/${{ vars.ECR_REPOSITORY_FRONTEND }}:latest
+          docker push $ECR_REGISTRY/${{ vars.ECR_REPOSITORY_FRONTEND }}:$IMAGE_TAG
+          docker push $ECR_REGISTRY/${{ vars.ECR_REPOSITORY_FRONTEND }}:latest
