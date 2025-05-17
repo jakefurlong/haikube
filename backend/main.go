@@ -63,7 +63,7 @@ func handleHaiku(w http.ResponseWriter, r *http.Request) {
 }
 
 func getAPIKeyFromSecretsManager(ctx context.Context, secretName string) (string, error) {
-	cfg, err := config.LoadDefaultConfig(ctx)
+	cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion("us-west-1"))
 	if err != nil {
 		return "", fmt.Errorf("failed to load AWS config: %w", err)
 	}
