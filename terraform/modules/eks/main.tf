@@ -32,21 +32,6 @@ module "eks" {
   enable_irsa        = true
   cluster_endpoint_public_access         = true
 
-  cluster_addons = {
-    coredns = {
-      most_recent                 = true
-      resolve_conflicts_on_create = "OVERWRITE"
-      configuration_values        = jsonencode(local.coredns_config)
-    }
-    kube-proxy = {
-      most_recent = true
-    }
-    vpc-cni = {
-      most_recent              = true
-      service_account_role_arn = aws_iam_role.vpc_cni.arn
-    }
-  }
-
   enable_cluster_creator_admin_permissions = true
 
   eks_managed_node_groups = {
@@ -68,23 +53,6 @@ module "eks" {
     }
   }
 }
-
-
-
-#module "aws_auth" {
-#  source  = "terraform-aws-modules/eks/aws//modules/aws-auth"
-#  version = "20.8.4"
-#
-#  aws_auth_users = [
-#    {
-#      userarn  = "arn:aws:iam::443374376889:user/jfurlong"
-#      username = "jfurlong"
-#      groups   = ["system:masters"]
-#    }
-#  ]
-#
-#  depends_on = [module.eks]
-#}
 
 output "vpc_id" {
   description = "The ID of the created VPC"
