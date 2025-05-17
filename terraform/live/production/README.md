@@ -46,3 +46,9 @@ Add policy to Node role manually to access ECR:
   "Resource": "*"
 }
 ```
+
+aws ecr get-login-password --region us-west-1 | docker login --username AWS --password-stdin 443374376889.dkr.ecr.us-west-1.amazonaws.com
+
+docker tag haikube-backend 443374376889.dkr.ecr.us-west-1.amazonaws.com/haikube-backend:latest
+
+Create a k8s secret
